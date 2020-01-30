@@ -12,6 +12,7 @@ namespace DBBMVCWebApp.Controllers
     {
         public IActionResult Index()
         {
+            ViewData["Message"] = "Games for sale";
             return View();
         }
 
@@ -26,6 +27,12 @@ namespace DBBMVCWebApp.Controllers
         {
             ViewData["Message"] = "Your contact page.";
 
+            return View();
+        }
+
+        public IActionResult CreateGameListing()
+        {
+            ViewData["Message"] = "Create Game Listing";
             return View();
         }
 
