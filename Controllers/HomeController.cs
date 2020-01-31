@@ -4,12 +4,19 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using DBBMVCWebApp.Data;
 using DBBMVCWebApp.Models;
 
 namespace DBBMVCWebApp.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly ApplicationDbContext _context;
+
+        public HomeController(ApplicationDbContext context) {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
             ViewData["Message"] = "Games for sale";
@@ -36,6 +43,21 @@ namespace DBBMVCWebApp.Controllers
             return View();
         }
 
+        [HttpPost, ActionName("CreateGameListing")]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateGameListing(Game game)
+        {
+            try
+            {
+                _context.Games.Add(game);
+                _context.SaveChanges();
+                return Redirect("/Home");
+            }
+            catch
+            {
+                return View(new ErrorViewModel { });
+            }
+        }
 
         public IActionResult Error()
         {
