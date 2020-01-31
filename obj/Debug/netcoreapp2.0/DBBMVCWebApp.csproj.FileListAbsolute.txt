@@ -7,6 +7,6 @@ C:\Users\Admin\source\repos\DBBMVCWebApp\DBBMVCWebApp\obj\Debug\netcoreapp2.0\DB
 C:\Users\Admin\source\repos\DBBMVCWebApp\DBBMVCWebApp\obj\Debug\netcoreapp2.0\DBBMVCWebApp.AssemblyInfoInputs.cache
 C:\Users\Admin\source\repos\DBBMVCWebApp\DBBMVCWebApp\obj\Debug\netcoreapp2.0\DBBMVCWebApp.AssemblyInfo.cs
 C:\Users\Admin\source\repos\DBBMVCWebApp\DBBMVCWebApp\bin\Debug\netcoreapp2.0\DBBMVCWebApp.pdb
-C:\Users\Admin\source\repos\DBBMVCWebApp\DBBMVCWebApp\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs
 C:\Users\Admin\source\repos\DBBMVCWebApp\DBBMVCWebApp\obj\Debug\netcoreapp2.0\DBBMVCWebApp.dll
 C:\Users\Admin\source\repos\DBBMVCWebApp\DBBMVCWebApp\obj\Debug\netcoreapp2.0\DBBMVCWebApp.pdb
+C:\Users\Admin\source\repos\DBBMVCWebApp\DBBMVCWebApp\obj\Debug\netcoreapp2.0\UserSecretsAssemblyInfo.cs

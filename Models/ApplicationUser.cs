@@ -9,5 +9,7 @@ namespace DBBMVCWebApp.Models
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
+        public string MobileNumber { get; internal set; }
+        public string PostCode { get; internal set; }
     }
 }

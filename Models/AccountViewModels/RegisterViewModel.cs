@@ -9,6 +9,11 @@ namespace DBBMVCWebApp.Models.AccountViewModels
     public class RegisterViewModel
     {
         [Required]
+        [StringLength(50)]
+        [Display(Name = "Username")]
+        public string Username { get; set; }
+
+        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
@@ -23,5 +28,15 @@ namespace DBBMVCWebApp.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+        
+        [Required]
+        [StringLength(11)]
+        [Display(Name = "MobileNumber")]
+        public string MobileNumber { get; set; }
+
+        [Required]
+        [StringLength(8)]
+        [Display(Name = "Postcode")]
+        public string Postcode { get; set; }
     }
 }

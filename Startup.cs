@@ -43,8 +43,6 @@ namespace DBBMVCWebApp
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext dbContext)
         {
 
-            dbContext.Database.EnsureCreated();
-
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
