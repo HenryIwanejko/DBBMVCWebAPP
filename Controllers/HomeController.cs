@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using DBBMVCWebApp.Data;
 using DBBMVCWebApp.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace DBBMVCWebApp.Controllers
 {
@@ -45,17 +44,34 @@ namespace DBBMVCWebApp.Controllers
 
         [HttpPost, ActionName("CreateGameListing")]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateGameListing(Game game)
+        public IActionResult CreateGameListing(Game game, IFormFile img)
         {
-            try
+            if (User.Identity.IsAuthenticated)
             {
-                _context.Games.Add(game);
-                _context.SaveChanges();
-                return Redirect("/Home");
+                try
+                {
+                    // Adds the logged in user's ID to the object
+                    game.OwnerID = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    game.GameImage = GetByteArrayFromImage(img);
+                    _context.Games.Add(game);
+                    _context.SaveChanges();
+                    return Redirect("/Home");
+                }
+                catch
+                {
+                    // Need to add error failed to save
+                    return View(new ErrorViewModel { });
+                }
             }
-            catch
+            return new UnauthorizedResult();
+        }
+        // Add to model or elsewhere
+        private byte[] GetByteArrayFromImage(IFormFile file)
+        {
+            using (var target = new MemoryStream())
             {
-                return View(new ErrorViewModel { });
+                file.CopyTo(target);
+                return target.ToArray();
             }
         }
 
