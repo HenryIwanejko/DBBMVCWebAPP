@@ -19,7 +19,7 @@ namespace DBBMVCWebApp.Controllers
         public IActionResult Index()
         {
             ViewData["Message"] = "Games for sale";
-            return View();
+            return View(_context.Games);
         }
 
         public IActionResult About()
@@ -52,7 +52,7 @@ namespace DBBMVCWebApp.Controllers
                 {
                     // Adds the logged in user's ID to the object
                     game.OwnerID = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    game.GameImage = GetByteArrayFromImage(img);
+                    // game.GameImage = GetByteArrayFromImage(img);
                     _context.Games.Add(game);
                     _context.SaveChanges();
                     return Redirect("/Home");
@@ -60,7 +60,7 @@ namespace DBBMVCWebApp.Controllers
                 catch
                 {
                     // Need to add error failed to save
-                    return View(new ErrorViewModel { });
+                    return Redirect("Error");
                 }
             }
             return new UnauthorizedResult();

@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<Game>
+@{
     ViewData["Title"] = "Home Page";
 }
 <style>
@@ -26,3 +27,29 @@ h2 {
         </div>
     </div>
 </div>
+<table class="table">
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+    </tr>
+    @foreach (var game in Model)
+    {   
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => game.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => game.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => game.OwnerID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => game.GameID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => game.Quantity)
+            </td>
+        </tr>
+    }
+</table>
