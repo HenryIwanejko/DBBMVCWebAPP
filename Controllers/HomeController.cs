@@ -38,8 +38,11 @@ namespace DBBMVCWebApp.Controllers
 
         public IActionResult CreateGameListing()
         {
-            ViewData["Message"] = "Create Game Listing";
-            return View();
+            if (User.Identity.IsAuthenticated) {
+                ViewData["Message"] = "Create Game Listing";
+                return View();
+            }
+            return Redirect("/Account/Login");
         }
 
         [HttpPost, ActionName("CreateGameListing")]

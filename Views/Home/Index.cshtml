@@ -18,20 +18,22 @@
 h2 {
     color: white;
 }
+
+.gap-bottom {
+    padding-bottom: 2%;
+}
 </style>
-<div class="title-section">
-    <div class="container">
-        <h2>@ViewData["Message"]</h2>
-        <div class="active-cyan-3 active-cyan-4 mb-4">
-            <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+<div class="gap-bottom">
+    <div class="title-section">
+        <div class="container">
+            <h2>@ViewData["Message"]</h2>
+            <div class="active-cyan-3 active-cyan-4 mb-4">
+                <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+            </div>
         </div>
     </div>
 </div>
-<table class="table">
-    <tr>
-        <th>Name</th>
-        <th>Description</th>
-    </tr>
+<table class="table pt">
     @foreach (var game in Model)
     {   
         <tr>
