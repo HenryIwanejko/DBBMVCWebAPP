@@ -47,7 +47,7 @@ namespace DBBMVCWebApp.Controllers
 
         [HttpPost, ActionName("CreateGameListing")]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateGameListing(Game game, IFormFile img)
+        public IActionResult CreateGameListing(Game game)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -55,7 +55,7 @@ namespace DBBMVCWebApp.Controllers
                 {
                     // Adds the logged in user's ID to the object
                     game.OwnerID = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    // game.GameImage = GetByteArrayFromImage(img);
+                    game.GameImage = GetByteArrayFromImage(Request.Form.Files[0]);
                     _context.Games.Add(game);
                     _context.SaveChanges();
                     return Redirect("/Home");
@@ -68,7 +68,19 @@ namespace DBBMVCWebApp.Controllers
             }
             return new UnauthorizedResult();
         }
-        // Add to model or elsewhere
+
+        public IActionResult MyGames() 
+        {
+            if (User.Identity.IsAuthenticated) 
+            {
+                var model =  new Models.HomeViewModels.MyGameViewModel(_context);
+                ViewData["Message"] = "MyGames";
+                return View(model.RetrieveUsersGames(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            }
+            return Redirect("/Account/Login");
+        }
+
+        // TODO: Add to model 
         private byte[] GetByteArrayFromImage(IFormFile file)
         {
             using (var target = new MemoryStream())

@@ -1,7 +1,9 @@
-﻿@model IEnumerable<Game>
+@model IEnumerable<Game>
+
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "MyGames";
 }
+
 <style>
 .title-section {
     background-color: #009DC4;
@@ -27,9 +29,6 @@ h2 {
     <div class="title-section">
         <div class="container">
             <h2>@ViewData["Message"]</h2>
-            <div class="active-cyan-3 active-cyan-4 mb-4">
-                <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-            </div>
         </div>
     </div>
 </div>
