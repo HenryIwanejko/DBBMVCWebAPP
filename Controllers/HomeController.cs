@@ -18,14 +18,16 @@ namespace DBBMVCWebApp.Controllers
 
         public IActionResult Index()
         {
-            ViewData["Message"] = "Games for sale";
-            return View(_context.Games);
+            if (User.Identity.IsAuthenticated) {
+                ViewData["Message"] = "Games for sale";
+                return View(_context.Games);
+            }
+            return Redirect("/Account/Login");
         }
 
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
-
             return View();
         }
 
@@ -36,6 +38,13 @@ namespace DBBMVCWebApp.Controllers
             return View();
         }
 
+        public IActionResult MyGames() 
+        {
+            Models.HomeViewModels.MyGamesViewModel myGamesViewModel =  new Models.HomeViewModels.MyGamesViewModel(_context);
+            ViewData["Message"] = "MyGames";
+            return View(myGamesViewModel.RetrieveUsersGames(this.User.FindFirstValue(ClaimTypes.NameIdentifier)));
+        }
+
         public IActionResult CreateGameListing()
         {
             ViewData["Message"] = "Create Game Listing";
@@ -44,7 +53,7 @@ namespace DBBMVCWebApp.Controllers
 
         [HttpPost, ActionName("CreateGameListing")]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateGameListing(Game game, IFormFile img)
+        public IActionResult CreateGameListing(Game game)
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -52,7 +61,7 @@ namespace DBBMVCWebApp.Controllers
                 {
                     // Adds the logged in user's ID to the object
                     game.OwnerID = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    // game.GameImage = GetByteArrayFromImage(img);
+                    game.GameImage = GetByteArrayFromImage(Request.Form.Files[0]);
                     _context.Games.Add(game);
                     _context.SaveChanges();
                     return Redirect("/Home");
