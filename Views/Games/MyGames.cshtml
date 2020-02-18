@@ -1,0 +1,56 @@
+@model IEnumerable<Game>
+@{
+    ViewData["Title"] = "MyGames";
+}
+<style>
+.title-section {
+    background-color: #009DC4;
+    border-radius: 25px;
+}
+.container {
+    padding: 20px;
+}
+
+.form-control {
+    width: 95%
+}
+
+h2 {
+    color: white;
+}
+</style>
+<div class="title-section">
+    <div class="container">
+        <h2>@ViewData["Message"]</h2>
+    </div>
+</div>
+<table class="table">
+    <tr> 
+        <th>Game Image</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Quantity</th>
+    </tr>
+    @foreach (var game in Model)
+    {   
+        <tr>
+            <td>
+                <img src="data:image;base64,@System.Convert.ToBase64String(game.GameImage)" width="100" height="100"/>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => game.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => game.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => game.Quantity)
+            </td>
+            <td>
+                <a asp-area="" asp-controller="Home" asp-action="MyGames">Edit</a>
+                |
+                <a asp-area="" asp-controller="Home" asp-action="MyGames">Delete</a>
+            </td>
+        </tr>
+    }
+</table>

@@ -33,9 +33,9 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     @if(User.Identity.IsAuthenticated) 
                     {
-                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Games For Sale</a></li>
-                        <li><a asp-area="" asp-controller="Home" asp-action="CreateGameListing">Create Listing</a></li>
-                        <li><a asp-area="" asp-controller="Home" asp-action="MyGames">MyGames</a></li>
+                        <li><a asp-area="" asp-controller="Games" asp-action="GamesForSale">Games For Sale</a></li>
+                        <li><a asp-area="" asp-controller="Games" asp-action="CreateGameListing">Create Listing</a></li>
+                        <li><a asp-area="" asp-controller="Games" asp-action="MyGames">MyGames</a></li>
                     }
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 </ul>
