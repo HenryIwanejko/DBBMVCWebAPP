@@ -1,18 +1,20 @@
-﻿@model DBBMVCWebApp.Models.Game
+@model DBBMVCWebApp.Models.Game
 
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "Edit";
 }
 
 <h2>@ViewData["Message"]</h2>
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreateGameListing" method="post" enctype="multipart/form-data">
+        <form asp-action="Edit" asp-route-id="@Model.GameID" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="GameID">
+            <input type="hidden" asp-for="OwnerID">
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -26,23 +28,24 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label class="control-label">Image</label>
-                <input asp-for="@Model.GameImage" type="file"/>
+                <label asp-for="GameImage" class="control-label">Image</label>
+                <input asp-for="GameImage" type="file"/>
             </div>
+            <img src="data:image;base64,@System.Convert.ToBase64String(@Model.GameImage)" width="100" height="100"/>
             <div class="form-group">
                 <label asp-for="Quantity" class="control-label"></label>
                 <input asp-for="Quantity" type="number" min="0" max="10000" step="1" class="form-control" />
                 <span asp-validation-for="Quantity" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="MyGames">Back to List</a>
+    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

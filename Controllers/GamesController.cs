@@ -5,6 +5,7 @@ using DBBMVCWebApp.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using System.IO;
+using System.Linq;
 
 namespace DBBMVCWebApp.Controllers
 {
@@ -27,15 +28,20 @@ namespace DBBMVCWebApp.Controllers
     
         public IActionResult MyGames() 
         {
-            Models.HomeViewModels.MyGamesViewModel myGamesViewModel =  new Models.HomeViewModels.MyGamesViewModel(_context);
-            ViewData["Message"] = "MyGames";
-            return View(myGamesViewModel.RetrieveUsersGames(this.User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            if (User.Identity.IsAuthenticated) {
+                ViewData["Message"] = "MyGames";
+                return View(_context.Games.Where(i => i.OwnerID == this.User.FindFirstValue(ClaimTypes.NameIdentifier)).ToList());
+            }
+            return Redirect("/Account/Login");
         }
 
         public IActionResult CreateGameListing()
         {
-            ViewData["Message"] = "Create Game Listing";
-            return View();
+            if (User.Identity.IsAuthenticated) {
+                ViewData["Message"] = "Create Game Listing";
+                return View();
+            }
+            return Redirect("/Account/Login");
         }
 
         [HttpPost, ActionName("CreateGameListing")]
@@ -51,7 +57,7 @@ namespace DBBMVCWebApp.Controllers
                     game.GameImage = GetByteArrayFromImage(Request.Form.Files[0]);
                     _context.Games.Add(game);
                     _context.SaveChanges();
-                    return Redirect("/Home");
+                    return Redirect("/Games/GamesForSale");
                 }
                 catch
                 {
@@ -71,6 +77,37 @@ namespace DBBMVCWebApp.Controllers
             }
         }
 
+        public IActionResult Edit(int? id) {
+            if (id == null) {
+                return Redirect("MyGames");
+            }
+            if (User.Identity.IsAuthenticated) {
+                ViewData["Message"] = "Edit Game Infomation";
+                Game game = _context.Games.Where(i => i.GameID == id).FirstOrDefault();
+                return View(game);
+            }
+            return Redirect("/Account/Login");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Game updatedGame) {
+            if (User.Identity.IsAuthenticated) {
+                Game retrievedGame = _context.Games.Where(x => x.GameID == updatedGame.GameID).FirstOrDefault();
+                if (Request.Form.Files[0].Length > 0 && Request.Form.Files[0] != null) {
+                    retrievedGame.GameImage = GetByteArrayFromImage(Request.Form.Files[0]);  
+                }
+                retrievedGame.Name = updatedGame.Name;
+                retrievedGame.Description = updatedGame.Description;
+                retrievedGame.Price = updatedGame.Price;
+                retrievedGame.Quantity = updatedGame.Quantity;
+                // _context.Games.Update(game);
+                // _context.SaveChanges();
+                return Redirect("/Games/MyGames");
+            }
+            return Redirect("/Account/Login");
+        }
+    
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
