@@ -6,6 +6,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace DBBMVCWebApp.Controllers
 {
@@ -143,12 +145,80 @@ namespace DBBMVCWebApp.Controllers
         {   
             if (User.Identity.IsAuthenticated) 
             {
-                ViewData["Message"] = "Basket";
-                return View(_context.Games);
+                ViewData["Message"] = "Basket";     
+                if (HttpContext.Session.GetString("basket") != null) {
+                    List<Game> basket = JsonConvert.DeserializeObject<List<Game>>(HttpContext.Session.GetString("basket"));
+                    return View(basket);
+                }
+                return View();
             }
             return Redirect("/Account/Login");
         }
-    
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Basket(Game chosenGame) 
+        {   
+            if (User.Identity.IsAuthenticated) 
+            {
+                if (HttpContext.Session.GetString("basket") == null) {
+                    HttpContext.Session.SetString("basket", string.Empty); 
+                }
+
+                string value = HttpContext.Session.GetString("basket");
+                List<Game> basket = JsonConvert.DeserializeObject<List<Game>>(value) ?? new List<Game>();
+
+                Game game;
+
+                if (getGameFromId(basket, chosenGame.GameID) == null) {
+                    game =  _context.Games.Where(i => i.GameID == chosenGame.GameID).FirstOrDefault();
+                    basket.Add(game);
+                } else {
+                    game = getGameFromId(basket, chosenGame.GameID);
+                    // need to get quantity from add basket
+                    game.Quantity += 1;
+                }
+
+                HttpContext.Session.SetString("basket", JsonConvert.SerializeObject(basket));
+
+                return Redirect("/Games/Basket");
+            }
+            return Redirect("/Account/Login");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult RemoveFromBasket(int? id) 
+        {   
+            if (User.Identity.IsAuthenticated) 
+            {
+                if (HttpContext.Session.GetString("basket") == null) {
+                   return Redirect("/Games/Basket");
+                }
+
+                string value = HttpContext.Session.GetString("basket");
+                List<Game> basket = JsonConvert.DeserializeObject<List<Game>>(value) ?? new List<Game>();
+                
+                Game gameToRemove = getGameFromId(basket, id);
+
+                basket.Remove(gameToRemove);
+
+                HttpContext.Session.SetString("basket", JsonConvert.SerializeObject(basket));
+
+                return Redirect("/Games/Basket");
+            }
+            return Redirect("/Account/Login");
+        }
+
+        private Game getGameFromId(List<Game> games, int? id) {
+            foreach (var game in games) {
+                if (game.GameID == id) {
+                    return game;
+                }
+            }
+            return null;
+        }
+
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

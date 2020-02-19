@@ -1,4 +1,4 @@
-@model IEnumerable<Game>
+@model List<Game>
 @{
     ViewData["Title"] = "Basket";
 }
@@ -14,6 +14,7 @@
         <th>Description</th>
         <th>Quantity</th>
     </tr>
+@if (Model != null) {
     @foreach (var game in Model)
     {   
         <tr>
@@ -30,8 +31,13 @@
                 @Html.DisplayFor(modelItem => game.Quantity)
             </td>
             <td>
-                <a asp-area="" asp-controller="Games" asp-action="Remove" asp-route-id="@game.GameID">Delete</a>
+                <form asp-action="RemoveFromBasket" asp-route-id="@game.GameID" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input class="btn btn-default" type="submit" value="Remove" />
+                    </div>
+                </form>
             </td>
         </tr>
     }
+}
 </table>
