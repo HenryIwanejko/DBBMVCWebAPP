@@ -28,6 +28,12 @@ h2 {
     </div>
 </div>
 <table class="table">
+    <tr> 
+        <th>Game Image</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Quantity Avaliable</th>
+    </tr>
     @foreach (var game in Model)
     {   
         <tr>
@@ -41,13 +47,10 @@ h2 {
                 @Html.DisplayFor(modelItem => game.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => game.OwnerID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => game.GameID)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => game.Quantity)
+            </td>
+            <td>
+                <a asp-area="" asp-controller="Games" asp-action="View" asp-route-id="@game.GameID">View</a>
             </td>
         </tr>
     }

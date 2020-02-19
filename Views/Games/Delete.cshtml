@@ -1,0 +1,18 @@
+@model DBBMVCWebApp.Models.Game
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+
+<h2>Are you sure you want to delete @Model.Name?</h2>
+
+<form asp-action="Delete" asp-route-id="@Model.GameID" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <input type="hidden" asp-for="GameID">
+        <input class="btn btn-default" type="submit" value="Yes" />
+    </div>
+</form>
+<form action="/Games/MyGames">
+    <input class="btn btn-default" type="submit" value="No" />
+</form>

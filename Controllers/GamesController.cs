@@ -67,7 +67,7 @@ namespace DBBMVCWebApp.Controllers
             }
             return new UnauthorizedResult();
         }
-        // Add to model or elsewhere
+    
         private byte[] GetByteArrayFromImage(IFormFile file)
         {
             using (var target = new MemoryStream())
@@ -101,8 +101,29 @@ namespace DBBMVCWebApp.Controllers
                 retrievedGame.Description = updatedGame.Description;
                 retrievedGame.Price = updatedGame.Price;
                 retrievedGame.Quantity = updatedGame.Quantity;
-                // _context.Games.Update(game);
-                // _context.SaveChanges();
+                _context.SaveChanges();
+                return Redirect("/Games/MyGames");
+            }
+            return Redirect("/Account/Login");
+        }
+
+        public IActionResult Delete(int? id) 
+        {
+            if (User.Identity.IsAuthenticated) {
+                Game game = _context.Games.Where(i => i.GameID == id).FirstOrDefault();
+                return View(game);
+            }
+            return Redirect("/Account/Login");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(Game chosenGame) 
+        {
+            if (User.Identity.IsAuthenticated) {
+                Game game = _context.Games.Where(i => i.GameID == chosenGame.GameID).FirstOrDefault();
+                _context.Games.Remove(game);
+                _context.SaveChanges();
                 return Redirect("/Games/MyGames");
             }
             return Redirect("/Account/Login");
