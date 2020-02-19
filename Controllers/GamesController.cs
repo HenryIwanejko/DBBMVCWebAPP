@@ -77,6 +77,16 @@ namespace DBBMVCWebApp.Controllers
             }
         }
 
+        public IActionResult View(int? id) 
+        {
+            if (User.Identity.IsAuthenticated) {
+                Game game = _context.Games.Where(i => i.GameID == id).FirstOrDefault();
+                ViewData["Message"] = game.Name;
+                return View(game);
+            }
+            return Redirect("/Account/Login");
+        }
+
         public IActionResult Edit(int? id) {
             if (id == null) {
                 return Redirect("MyGames");
@@ -125,6 +135,16 @@ namespace DBBMVCWebApp.Controllers
                 _context.Games.Remove(game);
                 _context.SaveChanges();
                 return Redirect("/Games/MyGames");
+            }
+            return Redirect("/Account/Login");
+        }
+
+        public IActionResult Basket() 
+        {   
+            if (User.Identity.IsAuthenticated) 
+            {
+                ViewData["Message"] = "Basket";
+                return View(_context.Games);
             }
             return Redirect("/Account/Login");
         }

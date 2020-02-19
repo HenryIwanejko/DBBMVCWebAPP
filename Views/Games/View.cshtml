@@ -1,0 +1,28 @@
+@model DBBMVCWebApp.Models.Game
+
+@{
+    ViewData["Title"] = "View";
+}
+<style>
+.gap {
+    padding-bottom: 15%;
+}
+</style>
+<div class="gap">
+    <h2><b>Name: </b>@ViewData["Message"]</h2>
+
+    <img src="data:image;base64,@System.Convert.ToBase64String(@Model.GameImage)" width="300" height="300" style="float: right;"/>
+    <br>
+
+    <div>
+        <b>Description</b>
+        <p>@Model.Description</p>
+    </div>
+
+    <div>
+        <b>Quantity</b>
+        <p>@Model.Quantity</p>
+    </div>
+
+    <a class="btn btn-default" href="">Add to Basket</a>
+</div>
