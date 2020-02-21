@@ -37,21 +37,34 @@ h2 {
     @foreach (var game in Model)
     {   
         <tr>
-            <td>
-                <img src="data:image;base64,@System.Convert.ToBase64String(game.GameImage)" width="100" height="100"/>
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => game.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => game.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => game.Quantity)
-            </td>
-            <td>
-                <a asp-area="" asp-controller="Games" asp-action="View" asp-route-id="@game.GameID">View</a>
-            </td>
+            <form asp-action="Basket" asp-route-id="@game.GameID" method="post" enctype="multipart/form-data">
+                    <td>
+                        <img src="data:image;base64,@System.Convert.ToBase64String(game.GameImage)" width="100" height="100"/>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => game.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => game.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => game.Quantity)
+                    </td>
+                    <td>
+                        £@Html.DisplayFor(modelItem => game.Price)
+                    </td>
+                    <td>
+                        <a class="btn btn-default" asp-area="" asp-controller="Games" asp-action="View" asp-route-id="@game.GameID">View</a>
+                    </td>
+                    <td>
+                        <input name="purchaseQuantity" value="1" type="number" min="1" max="@game.Quantity" step="1" class="form-control" />
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <input type="submit" value="Add to Basket" class="btn btn-default" />
+                        </div>
+                    </td>
+            </form>
         </tr>
     }
 </table>

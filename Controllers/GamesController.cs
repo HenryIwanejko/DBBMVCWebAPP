@@ -147,7 +147,7 @@ namespace DBBMVCWebApp.Controllers
             {
                 ViewData["Message"] = "Basket";     
                 if (HttpContext.Session.GetString("basket") != null) {
-                    List<Game> basket = JsonConvert.DeserializeObject<List<Game>>(HttpContext.Session.GetString("basket"));
+                    List<BasketItem> basket = JsonConvert.DeserializeObject<List<BasketItem>>(HttpContext.Session.GetString("basket"));
                     return View(basket);
                 }
                 return View();
@@ -157,26 +157,41 @@ namespace DBBMVCWebApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Basket(Game chosenGame) 
+        public IActionResult Basket(int? id, int? purchaseQuantity) 
         {   
             if (User.Identity.IsAuthenticated) 
-            {
+            {   
+
+                if (id == null || purchaseQuantity == null) {
+                    return BadRequest();
+                }
+
                 if (HttpContext.Session.GetString("basket") == null) {
                     HttpContext.Session.SetString("basket", string.Empty); 
                 }
 
                 string value = HttpContext.Session.GetString("basket");
-                List<Game> basket = JsonConvert.DeserializeObject<List<Game>>(value) ?? new List<Game>();
+                List<BasketItem> basket = JsonConvert.DeserializeObject<List<BasketItem>>(value) ?? new List<BasketItem>();
 
-                Game game;
+                Game game = _context.Games.Where(i => i.GameID == id).FirstOrDefault();
 
-                if (getGameFromId(basket, chosenGame.GameID) == null) {
-                    game =  _context.Games.Where(i => i.GameID == chosenGame.GameID).FirstOrDefault();
-                    basket.Add(game);
+                BasketItem basketItem;
+
+                if (getBasketItemFromId(basket, id) == null) {
+                    basketItem = new BasketItem(game.GameID,
+                        game.OwnerID,
+                        purchaseQuantity.GetValueOrDefault(),
+                        game.Name,
+                        game.Description,
+                        game.Price,
+                        game.GameImage
+                     );
+                     basket.Add(basketItem);
                 } else {
-                    game = getGameFromId(basket, chosenGame.GameID);
-                    // need to get quantity from add basket
-                    game.Quantity += 1;
+                    basketItem = getBasketItemFromId(basket, id);
+                    if (game.Quantity >= basketItem.PurchaseQuantity + purchaseQuantity.GetValueOrDefault()) {
+                        basketItem.PurchaseQuantity += purchaseQuantity.GetValueOrDefault();
+                    }
                 }
 
                 HttpContext.Session.SetString("basket", JsonConvert.SerializeObject(basket));
@@ -197,9 +212,9 @@ namespace DBBMVCWebApp.Controllers
                 }
 
                 string value = HttpContext.Session.GetString("basket");
-                List<Game> basket = JsonConvert.DeserializeObject<List<Game>>(value) ?? new List<Game>();
+                List<BasketItem> basket = JsonConvert.DeserializeObject<List<BasketItem>>(value) ?? new List<BasketItem>();
                 
-                Game gameToRemove = getGameFromId(basket, id);
+                BasketItem gameToRemove = getBasketItemFromId(basket, id);
 
                 basket.Remove(gameToRemove);
 
@@ -210,7 +225,7 @@ namespace DBBMVCWebApp.Controllers
             return Redirect("/Account/Login");
         }
 
-        private Game getGameFromId(List<Game> games, int? id) {
+        private BasketItem getBasketItemFromId(List<BasketItem> games, int? id) {
             foreach (var game in games) {
                 if (game.GameID == id) {
                     return game;

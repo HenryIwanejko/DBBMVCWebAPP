@@ -1,4 +1,4 @@
-@model List<Game>
+@model List<BasketItem>
 @{
     ViewData["Title"] = "Basket";
 }
@@ -28,7 +28,7 @@
                 @Html.DisplayFor(modelItem => game.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => game.Quantity)
+                @Html.DisplayFor(modelItem => game.PurchaseQuantity)
             </td>
             <td>
                 <form asp-action="RemoveFromBasket" asp-route-id="@game.GameID" method="post" enctype="multipart/form-data">
