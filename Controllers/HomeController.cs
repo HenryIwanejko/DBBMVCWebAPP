@@ -18,8 +18,11 @@ namespace DBBMVCWebApp.Controllers
 
         public IActionResult Index()
         {
-            ViewData["Message"] = "Games for sale";
-            return View(_context.Games);
+            if (User.Identity.IsAuthenticated) {
+                ViewData["Message"] = "Games for sale";
+                return View(_context.Games);
+            }
+            return Redirect("/Account/Login");
         }
 
         public IActionResult About()
