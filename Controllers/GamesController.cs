@@ -147,7 +147,8 @@ namespace DBBMVCWebApp.Controllers
             {
                 ViewData["Message"] = "Basket";     
                 if (HttpContext.Session.GetString("basket") != null) {
-                    List<BasketItem> basket = JsonConvert.DeserializeObject<List<BasketItem>>(HttpContext.Session.GetString("basket"));
+                    List<BasketItem> basketItems = JsonConvert.DeserializeObject<List<BasketItem>>(HttpContext.Session.GetString("basket"));
+                    Basket basket = new Basket(basketItems);
                     return View(basket);
                 }
                 return View();

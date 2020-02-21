@@ -10,8 +10,6 @@
 </style>
 
 <form class="gap" asp-action="Basket" asp-route-id="@Model.GameID" method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="GameID">
-    <input type="hidden" asp-for="OwnerID">
     <h2><b>Name: </b>@ViewData["Message"]</h2>
     <img src="data:image;base64,@System.Convert.ToBase64String(@Model.GameImage)" width="300" height="300" style="float: right;"/>
     <br>
@@ -22,11 +20,22 @@
     </div>
 
     <div>
-        <b>Quantity</b>
+        <b>Quantity Avaliable</b>
         <p>@Model.Quantity</p>
     </div>
-
-    <div class="form-group">
-        <input type="submit" value="Add to Basket" class="btn btn-default" />
-    </div>
+    <table class="table">
+        <tr>
+            <th>Quantity</th>
+        </tr>
+        <tr>
+            <td>
+                <input name="purchaseQuantity" value="1" type="number" min="1" max="@Model.Quantity" step="1" class="form-control" />
+            </td>
+            <td>
+                <div class="form-group">
+                    <input type="submit" value="Add to Basket" class="btn btn-default" />
+                </div>
+            </td>
+        </tr>
+    </table>
 </form>

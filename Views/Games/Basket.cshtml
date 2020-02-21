@@ -1,21 +1,46 @@
-@model List<BasketItem>
+@model Basket
 @{
     ViewData["Title"] = "Basket";
 }
+<style>
+.title-section {
+    background-color: #009DC4;
+    border-radius: 25px;
+}
+.container {
+    padding: 20px;
+}
+.order-section {
+    padding: 0.5%;
+    border-style: solid;
+    border-width: 3px;
+    border-color: #009DC4;
+}
+h2 {
+    color: white;
+}
+
+.table {
+    border: none;
+}
+</style>
+
 <div class="title-section">
     <div class="container">
         <h2>@ViewData["Message"]</h2>
     </div>
 </div>
-<table class="table">
+
+@if (Model != null) {
+    <table class="table">
     <tr> 
         <th>Game Image</th>
         <th>Name</th>
         <th>Description</th>
         <th>Quantity</th>
     </tr>
-@if (Model != null) {
-    @foreach (var game in Model)
+
+    @foreach (var game in Model.BasketItems)
     {   
         <tr>
             <td>
@@ -39,5 +64,31 @@
             </td>
         </tr>
     }
+    </table>
+    <div class="order-section">
+        <table class="table">
+            <tr>
+                <th>Order Total:</th>
+                <th>Number of Items:</th>
+                <th></th>
+            </tr>
+            <tr>
+                <td>
+                    £@Html.DisplayFor(model => model.BasketTotal)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.NumberOfItems)
+                </td>
+                <td>
+                    <form asp-action="Checkout" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <input style="float: right;"class="btn btn-default" type="submit" value="Checkout" />
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        </table>
+    </div>
+} else {
+    <h3>There is currently no items in the basket.</h3>
 }
-</table>
