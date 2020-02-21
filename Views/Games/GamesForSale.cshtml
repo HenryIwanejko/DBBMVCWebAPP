@@ -37,7 +37,7 @@ h2 {
     @foreach (var game in Model)
     {   
         <tr>
-            <form asp-action="Basket" asp-route-id="@game.GameID" method="post" enctype="multipart/form-data">
+            <form asp-action="Basket" asp-controller="Order" asp-route-id="@game.GameID" method="post" enctype="multipart/form-data">
                     <td>
                         <img src="data:image;base64,@System.Convert.ToBase64String(game.GameImage)" width="100" height="100"/>
                     </td>

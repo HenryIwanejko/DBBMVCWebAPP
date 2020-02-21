@@ -47,9 +47,9 @@ h2 {
                 @Html.DisplayFor(modelItem => game.Quantity)
             </td>
             <td>
-                <a asp-area="" asp-controller="Games" asp-action="Edit" asp-route-id="@game.GameID">Edit</a>
-                |
-                <a asp-area="" asp-controller="Games" asp-action="Delete" asp-route-id="@game.GameID">Delete</a>
+                <a class="btn btn-default" asp-area="" asp-controller="Games" asp-action="Edit" asp-route-id="@game.GameID">Edit</a>
+                <a class="btn btn-default" asp-area="" asp-controller="Games" asp-action="View" asp-route-id="@game.GameID">View</a>
+                <a class="btn btn-default" asp-area="" asp-controller="Games" asp-action="Delete" asp-route-id="@game.GameID">Delete</a>
             </td>
         </tr>
     }

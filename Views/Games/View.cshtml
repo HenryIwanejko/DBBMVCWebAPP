@@ -9,7 +9,7 @@
 }
 </style>
 
-<form class="gap" asp-action="Basket" asp-route-id="@Model.GameID" method="post" enctype="multipart/form-data">
+<form class="gap" asp-controller="Order" asp-action="Basket" asp-route-id="@Model.GameID" method="post" enctype="multipart/form-data">
     <h2><b>Name: </b>@ViewData["Message"]</h2>
     <img src="data:image;base64,@System.Convert.ToBase64String(@Model.GameImage)" width="300" height="300" style="float: right;"/>
     <br>

@@ -7,8 +7,7 @@ namespace DBBMVCWebApp.Models
     public class Basket
     {
         public List<BasketItem> BasketItems { get; private set; }
-        
-        [DataType(DataType.Currency)]
+
         public decimal BasketTotal { get; private set; }
 
         public int NumberOfItems { get; set; }

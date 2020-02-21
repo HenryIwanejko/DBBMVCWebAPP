@@ -74,7 +74,7 @@ h2 {
             </tr>
             <tr>
                 <td>
-                    £@Html.DisplayFor(model => model.BasketTotal)
+                    £@string.Format("{0:C}", Model.BasketTotal)
                 </td>
                 <td>
                     @Html.DisplayFor(model => model.NumberOfItems)
