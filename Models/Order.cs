@@ -14,5 +14,12 @@ namespace DBBMVCWebApp.Models
         public DateTime OrderDate { get; set; }
 
         public decimal OrderTotal { get; set; }
+
+        public Order(string userId, DateTime orderDate, decimal orderTotal)
+        {
+            UserId = userId;
+            OrderDate = orderDate;
+            OrderTotal = orderTotal;
+        }
     }
 }

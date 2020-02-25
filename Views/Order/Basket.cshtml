@@ -56,6 +56,9 @@ h2 {
                 @Html.DisplayFor(modelItem => game.PurchaseQuantity)
             </td>
             <td>
+                £@Html.DisplayFor(modelItem => game.Price)
+            </td>
+            <td>
                 <form asp-action="RemoveFromBasket" asp-route-id="@game.GameID" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <input class="btn btn-default" type="submit" value="Remove" />
@@ -74,7 +77,7 @@ h2 {
             </tr>
             <tr>
                 <td>
-                    £@string.Format("{0:C}", Model.BasketTotal)
+                    £@Html.DisplayFor(model => model.BasketTotal)
                 </td>
                 <td>
                     @Html.DisplayFor(model => model.NumberOfItems)

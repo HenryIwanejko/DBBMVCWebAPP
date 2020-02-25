@@ -33,6 +33,11 @@ h2 {
         <th>Name</th>
         <th>Description</th>
         <th>Quantity Avaliable</th>
+        <th>Price</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>Status</th>
     </tr>
     @foreach (var game in Model)
     {   
@@ -53,17 +58,25 @@ h2 {
                     <td>
                         £@Html.DisplayFor(modelItem => game.Price)
                     </td>
-                    <td>
-                        <a class="btn btn-default" asp-area="" asp-controller="Games" asp-action="View" asp-route-id="@game.GameID">View</a>
-                    </td>
-                    <td>
-                        <input name="purchaseQuantity" value="1" type="number" min="1" max="@game.Quantity" step="1" class="form-control" />
-                    </td>
-                    <td>
-                        <div class="form-group">
-                            <input type="submit" value="Add to Basket" class="btn btn-default" />
-                        </div>
-                    </td>
+                    @if (game.Quantity != 0) {
+                        <td>
+                            <a class="btn btn-default" asp-area="" asp-controller="Games" asp-action="View" asp-route-id="@game.GameID">View</a>
+                        </td>
+                        <td>
+                            <input name="purchaseQuantity" value="1" type="number" min="1" max="@game.Quantity" step="1" class="form-control" />
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <input type="submit" value="Add to Basket" class="btn btn-default" />
+                            </div>
+                        </td>
+                        <td>For-sale</td>
+                    } else {
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Sold!</td>
+                    }
             </form>
         </tr>
     }

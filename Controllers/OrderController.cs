@@ -4,6 +4,7 @@ using DBBMVCWebApp.Data;
 using DBBMVCWebApp.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
@@ -119,6 +120,35 @@ namespace DBBMVCWebApp.Controllers
         public IActionResult Checkout() {
             if (User.Identity.IsAuthenticated) 
             {
+                if (HttpContext.Session.GetString("basket") == null) {
+                   return Redirect("/Order/Basket");
+                }
+
+                string value = HttpContext.Session.GetString("basket");
+                List<BasketItem> basketItems = JsonConvert.DeserializeObject<List<BasketItem>>(value) ?? new List<BasketItem>();
+                Basket basket = new Basket(basketItems);
+
+                string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);    
+                Order order = new Order(userId, DateTime.Now, basket.BasketTotal);
+
+                _context.Orders.Add(order);
+                _context.SaveChanges();
+
+                foreach(var basketItem in basket.BasketItems) {
+                    OrderItem orderItem = new OrderItem(
+                        order.OrderID,
+                        basketItem.GameID,
+                        basketItem.PurchaseQuantity
+                    );
+                    _context.OrderItems.Add(orderItem);
+
+                    Game game = _context.Games.Where(i => i.GameID == orderItem.GameID).FirstOrDefault();
+                    
+                    game.Quantity -= orderItem.Quantity;
+                }
+
+                _context.SaveChanges();
+
                 return Redirect("TODO: confirmation screen");
             }
             return Redirect("/Account/Login");
