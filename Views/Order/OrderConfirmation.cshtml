@@ -1,0 +1,44 @@
+@model Order
+@{
+    ViewData["Title"] = "OrderConfirmation";
+}
+<style>
+.title-section {
+    background-color: #009DC4;
+    border-radius: 25px;
+}
+.container {
+    padding: 20px;
+}
+.order-section {
+    padding: 0.5%;
+    border-style: solid;
+    border-width: 3px;
+    border-color: #009DC4;
+}
+h2 {
+    color: white;
+}
+
+.table {
+    border: none;
+}
+</style>
+<div class="title-section">
+    <div class="container">
+        <h2>@ViewData["Message"]</h2>
+    </div>
+</div>
+<h3>Order Details:</h3>
+<table class="table">
+    <tr> 
+        <th>OrderID</th>
+        <th>Order Date</th>
+        <th>Order Total</th>
+    </tr>
+    <tr>
+        <td>@Html.DisplayFor(modelItem => modelItem.OrderID)</td>
+        <td>@Html.DisplayFor(modelItem => modelItem.OrderDate)</td>
+        <td>£@Html.DisplayFor(modelItem => modelItem.OrderTotal)</td>
+    </tr>
+</table>

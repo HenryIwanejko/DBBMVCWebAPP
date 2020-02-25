@@ -15,6 +15,8 @@ namespace DBBMVCWebApp.Models
 
         public decimal OrderTotal { get; set; }
 
+        public Order() {}
+        
         public Order(string userId, DateTime orderDate, decimal orderTotal)
         {
             UserId = userId;

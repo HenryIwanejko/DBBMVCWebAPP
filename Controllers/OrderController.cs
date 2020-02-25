@@ -134,22 +134,42 @@ namespace DBBMVCWebApp.Controllers
                 _context.Orders.Add(order);
                 _context.SaveChanges();
 
+                List<OrderItem> orderItems = new List<OrderItem>();
+
                 foreach(var basketItem in basket.BasketItems) {
                     OrderItem orderItem = new OrderItem(
                         order.OrderID,
                         basketItem.GameID,
                         basketItem.PurchaseQuantity
                     );
-                    _context.OrderItems.Add(orderItem);
+
+                    orderItems.Add(orderItem);
 
                     Game game = _context.Games.Where(i => i.GameID == orderItem.GameID).FirstOrDefault();
                     
                     game.Quantity -= orderItem.Quantity;
                 }
 
+                order.OrderItems = orderItems;
+
                 _context.SaveChanges();
 
-                return Redirect("TODO: confirmation screen");
+                return Redirect("/Order/OrderConfirmation/" + order.OrderID);
+            }
+            return Redirect("/Account/Login");
+        }
+
+        public IActionResult OrderConfirmation(int? id) 
+        {   
+            if (User.Identity.IsAuthenticated) 
+            {
+                Order order = _context.Orders.Where(o => o.OrderID == id).FirstOrDefault();
+
+                if (order.UserId != this.User.FindFirstValue(ClaimTypes.NameIdentifier)) {
+                    return Unauthorized();
+                }
+                ViewData["Message"] = "Order Successful";
+                return View(order);
             }
             return Redirect("/Account/Login");
         }

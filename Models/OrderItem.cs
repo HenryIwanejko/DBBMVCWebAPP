@@ -17,6 +17,8 @@ namespace DBBMVCWebApp.Models
 
         public virtual Order Order { get; set; }
 
+        public OrderItem() {}
+        
         public OrderItem(int orderID, int gameID, int quantity)
         {
             OrderID = orderID;
