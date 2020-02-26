@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using DBBMVCWebApp.Data;
@@ -19,11 +20,39 @@ namespace DBBMVCWebApp.Controllers
             _context = context;
         }
 
-        public IActionResult GamesForSale()
+        public IActionResult GamesForSale(string searchString, string order)
         {
             if (User.Identity.IsAuthenticated) {
                 ViewData["Message"] = "Games for sale";
-                return View(_context.Games);
+
+                ViewData["NameSortParm"] = String.IsNullOrEmpty(order) ? "name_desc" : "";
+                ViewData["DescriptionSortParm"] = order == "description" ? "description_desc" : "description";
+                ViewData["CurrentFilter"] = searchString;
+
+                var games = from Game in _context.Games select Game;
+
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    games = games.Where(game => game.Name.Contains(searchString)
+                                        || game.Description.Contains(searchString));
+                }
+
+                switch (order) {
+                    case "name_desc":
+                        games = games.OrderByDescending(s => s.Name);
+                        break;
+                    case "description":
+                        games = games.OrderBy(s => s.Description);
+                        break;
+                    case "description_desc":
+                        games = games.OrderByDescending(s => s.Description);
+                        break;
+                    default:
+                        games = games.OrderBy(s => s.Name);
+                        break;
+                }
+
+                return View(games.ToList());
             }
             return Redirect("/Account/Login");
         }

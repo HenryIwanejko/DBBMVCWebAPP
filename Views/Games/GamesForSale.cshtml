@@ -23,15 +23,18 @@ h2 {
     <div class="container">
         <h2>@ViewData["Message"]</h2>
         <div class="active-cyan-3 active-cyan-4 mb-4">
-            <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+            <form>
+                 <input value="@ViewData["currentFilter"]" name="searchString" class="form-control" type="text" placeholder="Search" aria-label="Search">
+                 <input value="Search" type="submit" class="btn btn-default">
+            </form>
         </div>
     </div>
 </div>
 <table class="table">
     <tr> 
         <th>Game Image</th>
-        <th>Name</th>
-        <th>Description</th>
+        <th><a asp-action="GamesForSale" asp-route-order="@ViewData["NameSortParm"]" asp-route-searchString="@ViewData["currentFilter"]">@Html.DisplayNameFor(model => model.Name)</a></th>
+        <th><a asp-action="GamesForSale" asp-route-order="@ViewData["DescriptionSortParm"]" asp-route-searchString="@ViewData["currentFilter"]">@Html.DisplayNameFor(model => model.Description)</a></th>
         <th>Quantity Avaliable</th>
         <th>Price</th>
         <th></th>

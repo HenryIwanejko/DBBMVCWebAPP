@@ -23,19 +23,23 @@
         <b>Quantity Avaliable</b>
         <p>@Model.Quantity</p>
     </div>
-    <table class="table">
-        <tr>
-            <th>Quantity</th>
-        </tr>
-        <tr>
-            <td>
-                <input name="purchaseQuantity" value="1" type="number" min="1" max="@Model.Quantity" step="1" class="form-control" />
-            </td>
-            <td>
-                <div class="form-group">
-                    <input type="submit" value="Add to Basket" class="btn btn-default" />
-                </div>
-            </td>
-        </tr>
-    </table>
+    @if (Model.Quantity > 0) {
+        <table class="table">
+            <tr>
+                <th>Quantity</th>
+            </tr>
+            <tr>
+                <td>
+                    <input name="purchaseQuantity" value="1" type="number" min="1" max="@Model.Quantity" step="1" class="form-control" />
+                </td>
+                <td>
+                    <div class="form-group">
+                        <input type="submit" value="Add to Basket" class="btn btn-default" />
+                    </div>
+                </td>
+            </tr>
+        </table>
+    } else {
+        <h3>Sold out!</h3>
+    }
 </form>
