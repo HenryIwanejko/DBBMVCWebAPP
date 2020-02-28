@@ -7,8 +7,6 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
-using Newtonsoft.Json;
 
 namespace DBBMVCWebApp.Controllers
 {
@@ -85,7 +83,7 @@ namespace DBBMVCWebApp.Controllers
                 {
                     // Adds the logged in user's ID to the object
                     game.OwnerID = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    game.GameImage = GetByteArrayFromImage(Request.Form.Files[0]);
+                    game.GameImage = new Image(Request.Form.Files[0]).Data;
                     _context.Games.Add(game);
                     _context.SaveChanges();
                     return Redirect("/Games/GamesForSale");
@@ -97,15 +95,6 @@ namespace DBBMVCWebApp.Controllers
                 }
             }
             return new UnauthorizedResult();
-        }
-    
-        private byte[] GetByteArrayFromImage(IFormFile file)
-        {
-            using (var target = new MemoryStream())
-            {
-                file.CopyTo(target);
-                return target.ToArray();
-            }
         }
 
         public IActionResult View(int? id) 
@@ -125,7 +114,11 @@ namespace DBBMVCWebApp.Controllers
             if (User.Identity.IsAuthenticated) {
                 ViewData["Message"] = "Edit Game Infomation";
                 Game game = _context.Games.Where(i => i.GameID == id).FirstOrDefault();
-                return View(game);
+                if (game.OwnerID == this.User.FindFirstValue(ClaimTypes.NameIdentifier)) {
+                    return View(game);
+                } else {
+                    return Redirect("/Games/MyGames");
+                }
             }
             return Redirect("/Account/Login");
         }
@@ -136,7 +129,7 @@ namespace DBBMVCWebApp.Controllers
             if (User.Identity.IsAuthenticated) {
                 Game retrievedGame = _context.Games.Where(x => x.GameID == updatedGame.GameID).FirstOrDefault();
                 if (Request.Form.Files[0].Length > 0 && Request.Form.Files[0] != null) {
-                    retrievedGame.GameImage = GetByteArrayFromImage(Request.Form.Files[0]);  
+                    retrievedGame.GameImage = new Image(Request.Form.Files[0]).Data; 
                 }
                 retrievedGame.Name = updatedGame.Name;
                 retrievedGame.Description = updatedGame.Description;
@@ -152,7 +145,11 @@ namespace DBBMVCWebApp.Controllers
         {
             if (User.Identity.IsAuthenticated) {
                 Game game = _context.Games.Where(i => i.GameID == id).FirstOrDefault();
-                return View(game);
+                if (game.OwnerID == this.User.FindFirstValue(ClaimTypes.NameIdentifier)) {
+                    return View(game);
+                } else {
+                    return Redirect("/Games/MyGames");
+                }
             }
             return Redirect("/Account/Login");
         }

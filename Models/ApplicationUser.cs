@@ -11,5 +11,6 @@ namespace DBBMVCWebApp.Models
     {
         public string MobileNumber { get; internal set; }
         public string PostCode { get; internal set; }
+        public byte[] ProfilePicture { get; internal set; }
     }
 }

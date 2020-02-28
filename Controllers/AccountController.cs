@@ -220,7 +220,15 @@ namespace DBBMVCWebApp.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Username, Email = model.Email, MobileNumber = model.MobileNumber, PostCode = model.Postcode};
+                byte[] profilePicture;
+                try {
+                    profilePicture = new Image(Request.Form.Files[0]).Data;
+                }
+                catch {
+                    return View(model);
+                }
+                
+                var user = new ApplicationUser { UserName = model.Username, Email = model.Email, MobileNumber = model.MobileNumber, PostCode = model.Postcode, ProfilePicture = profilePicture};
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
