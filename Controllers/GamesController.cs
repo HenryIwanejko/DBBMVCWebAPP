@@ -160,8 +160,10 @@ namespace DBBMVCWebApp.Controllers
         {
             if (User.Identity.IsAuthenticated) {
                 Game game = _context.Games.Where(i => i.GameID == chosenGame.GameID).FirstOrDefault();
-                _context.Games.Remove(game);
-                _context.SaveChanges();
+                if (game.OwnerID == this.User.FindFirstValue(ClaimTypes.NameIdentifier)) {
+                    _context.Games.Remove(game);
+                    _context.SaveChanges();
+                }
                 return Redirect("/Games/MyGames");
             }
             return Redirect("/Account/Login");
