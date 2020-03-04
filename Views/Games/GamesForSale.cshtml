@@ -1,3 +1,7 @@
+@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<ApplicationUser> userManager
+
 @model IEnumerable<Game>
 @{
     ViewData["Title"] = "Games For Sale";
@@ -61,7 +65,7 @@ h2 {
                     <td>
                         £@Html.DisplayFor(modelItem => game.Price)
                     </td>
-                    @if (game.Quantity != 0) {
+                    @if (game.Quantity != 0 && userManager.GetUserId(User) != game.OwnerID) {
                         <td>
                             <a class="btn btn-default" asp-area="" asp-controller="Games" asp-action="View" asp-route-id="@game.GameID">View</a>
                         </td>
@@ -75,10 +79,17 @@ h2 {
                         </td>
                         <td>For-sale</td>
                     } else {
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>Sold!</td>
+                        @if (userManager.GetUserId(User) != game.OwnerID) {
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>Sold!</td>
+                        } else {
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        }
                     }
             </form>
         </tr>
