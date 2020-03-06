@@ -168,8 +168,20 @@ namespace DBBMVCWebApp.Controllers
                 if (order.UserId != this.User.FindFirstValue(ClaimTypes.NameIdentifier)) {
                     return Unauthorized();
                 }
+
+                List<OrderItem> orderItems = _context.OrderItems.Where(item => item.OrderID == order.OrderID).ToList();
+                
+                List<Game> games = new List<Game>();
+
+                foreach (var orderItem in orderItems) {
+                    Game game = _context.Games.Where(item => item.GameID == orderItem.GameID).FirstOrDefault();
+                    games.Add(game);
+                }
+                   
+                OrderConfirmation orderConfirmation = new OrderConfirmation(order, games);
+
                 ViewData["Message"] = "Order Successful";
-                return View(order);
+                return View(orderConfirmation);
             }
             return Redirect("/Account/Login");
         }

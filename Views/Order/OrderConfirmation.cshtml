@@ -1,4 +1,4 @@
-@model Order
+@model OrderConfirmation
 @{
     ViewData["Title"] = "OrderConfirmation";
 }
@@ -37,8 +37,34 @@ h2 {
         <th>Order Total</th>
     </tr>
     <tr>
-        <td>@Html.DisplayFor(modelItem => modelItem.OrderID)</td>
-        <td>@Html.DisplayFor(modelItem => modelItem.OrderDate)</td>
-        <td>£@Html.DisplayFor(modelItem => modelItem.OrderTotal)</td>
+        <td>@Html.DisplayFor(modelItem => modelItem.Order.OrderID)</td>
+        <td>@Html.DisplayFor(modelItem => modelItem.Order.OrderDate)</td>
+        <td>£@Html.DisplayFor(modelItem => modelItem.Order.OrderTotal)</td>
     </tr>
+</table>
+<h3>Order Items:</h3>
+<table class="table">
+    <tr> 
+        <th>Game Image</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Quantity</th>
+    </tr>
+    @foreach (var game in Model.OrderItems)
+    {   
+        <tr>
+            <td>
+                <img src="data:image;base64,@System.Convert.ToBase64String(game.GameImage)" width="100" height="100"/>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => game.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => game.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => game.Quantity)
+            </td>
+        </tr>
+    }
 </table>
