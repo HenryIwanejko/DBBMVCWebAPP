@@ -30,8 +30,6 @@ namespace DBBMVCWebApp.Models
         [Display(Name = "Image of the Game")]
         public byte[] GameImage { get; set; }
 
-        public List<OrderItem> OrderItems { get; set; }
-
         [Required]
         [Display(Name = "Quantity")]
         [RegularExpression("([0-9]+)", ErrorMessage = "Please enter valid number")]
